@@ -65,3 +65,8 @@ extras/Projucer/JUCECompileEngine.dylib
 /build
 
 CMakeUserPresets.json
+
+# Cymatic Somatics Ignores
+Projucer.exe
+src/JuceLibraryCode
+src/JuceLibraryCode/*
