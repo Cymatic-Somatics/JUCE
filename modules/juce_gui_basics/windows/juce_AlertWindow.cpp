@@ -393,8 +393,14 @@ void AlertWindow::updateLayout (const bool onlyIncreaseSize)
         iconSpace = iconWidth;
     }
 
-    w = jmax (350, (int) textLayout.getWidth() + iconSpace + edgeGap * 4);
-    w = jmin (w, (int) ((float) getParentWidth() * 0.7f));
+    // Cymatic Somatics breaking the hardcoded default width of 350, but this requires the window is sized before calls to this code
+    int ww = getWidth();
+    if (ww < 375) ww = 375;
+    w = jmax(ww, (int)textLayout.getWidth() + iconSpace + edgeGap * 4);
+    w = jmin(w, (int)((float)getParentWidth() * 0.7f));
+
+    //w = jmax (350, (int) textLayout.getWidth() + iconSpace + edgeGap * 4);
+    //w = jmin (w, (int) ((float) getParentWidth() * 0.7f)); 
 
     auto textLayoutH = (int) textLayout.getHeight();
     auto textBottom = 16 + titleH + textLayoutH;

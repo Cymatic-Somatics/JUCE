@@ -210,8 +210,12 @@ private:
         return unalignedPointerCast<StringHolder*> (unalignedPointerCast<char*> (charPtr.getAddress()) - offsetof (StringHolder, text));
     }
 
-    static bool isEmptyString (StringHolder* other)
+    static bool isEmptyString(StringHolder* other)
     {
+        // HACK Cymatic Somatics patch to prevent crash on Linux/rPI when running two different plug-in types at the same time
+        if (other != nullptr && other->text[0] == '\0')
+            return true;
+
         return other == &emptyString;
     }
 
