@@ -572,18 +572,26 @@ void AudioDeviceManager::insertDefaultDeviceNames (AudioDeviceSetup& setup) cons
         if (setup.inputDeviceName.isEmpty() && ! inputsToTest.isEmpty())
             setup.inputDeviceName = inputsToTest[0];
 
-        // We check all possible in-out pairs until the first validation pass. If no pair passes we
-        // leave the setup unchanged.
-        for (const auto& out : outputsToTest)
+        // Windows ASIO requires input and output device names to match
+        if (type->getTypeName() == "ASIO")
         {
-            for (const auto& in : inputsToTest)
+            setup.inputDeviceName = setup.outputDeviceName;
+        }
+        else
+        {
+            // We check all possible in-out pairs until the first validation pass. If no pair passes we
+            // leave the setup unchanged.
+            for (const auto& out : outputsToTest)
             {
-                if (validate (out, in))
+                for (const auto& in : inputsToTest)
                 {
-                    setup.outputDeviceName = out;
-                    setup.inputDeviceName  = in;
+                    if (validate(out, in))
+                    {
+                        setup.outputDeviceName = out;
+                        setup.inputDeviceName = in;
 
-                    return;
+                        return;
+                    }
                 }
             }
         }
