@@ -246,6 +246,12 @@ public:
         */
         bool writeToStream (OutputStream& target, double* progress) const;
 
+        /** Generates the zip file, writing it to the specified stream.
+            If the progress parameter is non-null, it will be updated with an approximate
+            progress status between 0 and 1.0
+        */
+        bool writeToStream(OutputStream& target, std::atomic<double>* progress, std::function<void(const juce::String& filename)> handler) const;
+
         //==============================================================================
     private:
         struct Item;
