@@ -63,6 +63,29 @@ public:
     /** Destroys the AlertWindow */
     ~AlertWindow() override;
 
+    // Cymatic Somatics breaking the hardcoded default width of 350, but this requires the window is sized before calls to this code
+    bool useScaleFactor = false;
+    int scaleFactorInt = 2;
+    float scaleFactorFloat = 2.f;
+
+    /** Gets the current GUI integer scale factor to use.*/
+    int getScaleFactorInt() { return useScaleFactor ? scaleFactorInt : 1; }
+
+    /** Gets the current GUI floating point scale factor to use.*/
+    float getScaleFactorFloat() { return useScaleFactor ? scaleFactorFloat : 1.f; }
+
+    /** Gets the current GUI integer scale factor to use.*/
+    int getScaledrInt(int value) { return !useScaleFactor ? value : (scaleFactorInt * value); }
+
+    /** Gets the current GUI integer scale factor to use.*/
+    int getScaledInt(float value) { return !useScaleFactor ? int(value) : (int)((float)scaleFactorInt * value); }
+
+    /** Gets the current GUI floating point scale factor to use.*/
+    float getScaledFloat(float value) { return !useScaleFactor ? value : (scaleFactorFloat * value); }
+
+    /** Gets the current GUI floating point scale factor to use.*/
+    float getScaledFloat(int value) { return !useScaleFactor ? (float)value : (scaleFactorFloat * float(value)); }
+
     //==============================================================================
     /** Returns the type of alert icon that was specified when the window
         was created. */

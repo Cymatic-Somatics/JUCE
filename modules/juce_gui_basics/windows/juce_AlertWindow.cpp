@@ -334,8 +334,8 @@ void AlertWindow::paint (Graphics& g)
         auto* te = textBoxes.getUnchecked(i);
 
         g.drawFittedText (textboxNames[i],
-                          te->getX(), te->getY() - 14,
-                          te->getWidth(), 14,
+                          te->getX(), te->getY() - getScaledInt(14),
+                          te->getWidth(), getScaledInt(14),
                           Justification::centredLeft, 1);
     }
 
@@ -344,22 +344,22 @@ void AlertWindow::paint (Graphics& g)
         auto* cb = comboBoxes.getUnchecked(i);
 
         g.drawFittedText (comboBoxNames[i],
-                          cb->getX(), cb->getY() - 14,
-                          cb->getWidth(), 14,
+                          cb->getX(), cb->getY() - getScaledInt(14),
+                          cb->getWidth(), getScaledInt(14),
                           Justification::centredLeft, 1);
     }
 
     for (auto* c : customComps)
         g.drawFittedText (c->getName(),
-                          c->getX(), c->getY() - 14,
-                          c->getWidth(), 14,
+                          c->getX(), c->getY() - getScaledInt(14),
+                          c->getWidth(), getScaledInt(14),
                           Justification::centredLeft, 1);
 }
 
 void AlertWindow::updateLayout (const bool onlyIncreaseSize)
 {
-    const int titleH = 24;
-    const int iconWidth = 80;
+    const int titleH = getScaledInt(24);
+    const int iconWidth = getScaledInt(80);
 
     auto& lf = getLookAndFeel();
     auto messageFont (lf.getAlertWindowMessageFont());
@@ -368,9 +368,9 @@ void AlertWindow::updateLayout (const bool onlyIncreaseSize)
                      messageFont.getStringWidth (getName()));
 
     auto sw = (int) std::sqrt (messageFont.getHeight() * (float) wid);
-    auto w = jmin (300 + sw * 2, (int) ((float) getParentWidth() * 0.7f));
-    const int edgeGap = 10;
-    const int labelHeight = 18;
+    auto w = jmin (getScaledInt(300) + sw * 2, (int) ((float) getParentWidth() * 0.7f));
+    const int edgeGap = getScaledInt(10);
+    const int labelHeight = getScaledInt(18);
     int iconSpace = 0;
 
     AttributedString attributedText;
@@ -395,7 +395,7 @@ void AlertWindow::updateLayout (const bool onlyIncreaseSize)
 
     // Cymatic Somatics breaking the hardcoded default width of 350, but this requires the window is sized before calls to this code
     int ww = getWidth();
-    if (ww < 375) ww = 375;
+    if (ww < getScaledInt(375)) ww = getScaledInt(375);
     w = jmax(ww, (int)textLayout.getWidth() + iconSpace + edgeGap * 4);
     w = jmin(w, (int)((float)getParentWidth() * 0.7f));
 
@@ -406,22 +406,22 @@ void AlertWindow::updateLayout (const bool onlyIncreaseSize)
     auto textBottom = 16 + titleH + textLayoutH;
     int h = textBottom;
 
-    int buttonW = 40;
+    int buttonW = getScaledInt(40);
 
     for (auto* b : buttons)
         buttonW += 16 + b->getWidth();
 
     w = jmax (buttonW, w);
 
-    h += (textBoxes.size() + comboBoxes.size() + progressBars.size()) * 50;
+    h += (textBoxes.size() + comboBoxes.size() + progressBars.size()) * getScaledInt(50);
 
     if (auto* b = buttons[0])
-        h += 20 + b->getHeight();
+        h += getScaledInt(20) + b->getHeight();
 
     for (auto* c : customComps)
     {
-        w = jmax (w, (c->getWidth() * 100) / 80);
-        h += 10 + c->getHeight();
+        w = jmax (w, (c->getWidth() * getScaledInt(100)) / getScaledInt(80));
+        h += getScaledInt(10) + c->getHeight();
 
         if (c->getName().isNotEmpty())
             h += labelHeight;
@@ -436,10 +436,10 @@ void AlertWindow::updateLayout (const bool onlyIncreaseSize)
     {
         auto* ac = static_cast<AlertTextComp*> (tb);
         ac->updateLayout ((int) ((float) w * 0.8f));
-        h += ac->getHeight() + 10;
+        h += ac->getHeight() + getScaledInt(10);
     }
 
-    h = jmin (getParentHeight() - 50, h);
+    h = jmin (getParentHeight() - getScaledInt(50), h);
 
     if (onlyIncreaseSize)
     {
@@ -480,7 +480,7 @@ void AlertWindow::updateLayout (const bool onlyIncreaseSize)
 
     for (auto* c : allComps)
     {
-        h = 22;
+        h = getScaledInt(22);
 
         const int comboIndex = comboBoxes.indexOf (dynamic_cast<ComboBox*> (c));
         if (comboIndex >= 0 && comboBoxNames [comboIndex].isNotEmpty())
@@ -508,7 +508,7 @@ void AlertWindow::updateLayout (const bool onlyIncreaseSize)
             c->setBounds (proportionOfWidth (0.1f), y, proportionOfWidth (0.8f), h);
         }
 
-        y += h + 10;
+        y += h + getScaledInt(10);
     }
 
     setWantsKeyboardFocus (getNumChildComponents() == 0);
