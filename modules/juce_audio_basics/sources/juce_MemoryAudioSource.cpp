@@ -85,7 +85,8 @@ void MemoryAudioSource::setNextReadPosition (int64 newPosition)
 
 int64 MemoryAudioSource::getNextReadPosition() const
 {
-    return position;
+    return isCurrentlyLooping ? position % getTotalLength() : position; // patch needed so that MemoryAudioSource reports looping correctly
+    //return position;
 }
 
 int64 MemoryAudioSource::getTotalLength() const
